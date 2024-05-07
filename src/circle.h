@@ -11,12 +11,15 @@ private :
   int id;
   sf :: Vector2f position;
   sf :: Vector2f center;
+  sf :: Vector2f initialPosition;
   float radius;
   sf :: Color fillColor;
   sf :: Color outlineColor;
   sf :: Vector2f velocity;
   float thickness;
   std :: vector<sf::Vector2f> positionVector;
+  std :: vector<sf::Vector2f> trails;
+  int trailHead = 0;
 
 protected : 
   float gravity;
@@ -31,6 +34,8 @@ public:
          int id = 2, float g = 9.81, float delta_t = 0.01);
 
   void draw(sf :: RenderWindow& window);
+  void draw(sf :: RenderTexture& texture);
+  void draw(sf :: RenderWindow& window, sf :: RenderTexture& texture);
   void print();
 
   // Getters
@@ -44,6 +49,8 @@ public:
   // Setters
   void setPosition(float x, float y) ;
 
+  void setInitialPosition(float x, float y);
+
   void setRadius(float r) ;
 
   void setFillColor(sf :: Color color) ;
@@ -53,6 +60,9 @@ public:
 
   void setVelocity(float x, float y);
   void setGravity(float g);
+
+
+  void updateTrail(sf:: Vector2f position);
 };
 
 #endif 

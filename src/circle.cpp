@@ -15,15 +15,113 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
         this -> radius = radius;
         gravity = g;
         this -> delta_t = delta_t;
+        trailHead = -1;
      }
 
-void Circle:: draw(sf :: RenderWindow& window) {
-    sf:: CircleShape Circle(radius);
+    void Circle:: draw(sf :: RenderWindow& window) {
+      sf:: CircleShape Circle(radius);    
+      Circle.setPosition(position);
+      Circle.setPointCount(50);
+      Circle.setFillColor(fillColor);
+      Circle.setOutlineColor(outlineColor);
+      Circle.setOutlineThickness(thickness);
+          
+      window.draw(Circle);
+
+      sf::VertexArray vertexArray(sf::Points);
+      
+      if ((int)trails.size() > 2) {
+        
+        int l = trailHead - 1;
+        int r = trailHead;
+        int count = 0;
+        while (l != trailHead) {
+          if (trailHead < l) {
+            if (l - trailHead < 4) break;
+          }
+          count++;
+          if (count > 1500) break;
+          if (l < 0) {
+            l = (int)trails.size() - 1;
+          }
+          if (r < 0) {
+            r = (int)trails.size() - 1;
+          }
+          sf::Vertex line[] = {
+              sf::Vertex(trails[r]),
+              sf::Vertex(trails[l])
+          };
+          float opacityFactor = static_cast<float>((int)trails.size() - count) / 500.0f;
+          sf::Uint8 newAlpha = static_cast<sf::Uint8>(fillColor.a * opacityFactor);
+
+        // Create a new color with less opacity based on ballColor
+          sf::Color lessOpaqueColor = fillColor;
+          lessOpaqueColor.a = newAlpha;
+          line[0].color = lessOpaqueColor;
+          line[1].color = lessOpaqueColor;
+
+          vertexArray.append(sf :: Vertex(trails[l], lessOpaqueColor));
+          // window.draw(line, 2, sf::Lines);
+          l--, r--;
+        }
+        window.draw(vertexArray);
+      }
+    } 
+
+  void Circle:: draw(sf :: RenderTexture& window) {
+    sf:: CircleShape Circle(radius);    
     Circle.setPosition(position);
     Circle.setPointCount(50);
     Circle.setFillColor(fillColor);
     Circle.setOutlineColor(outlineColor);
     Circle.setOutlineThickness(thickness);
+        
+    window.draw(Circle);
+    
+    if ((int)trails.size() > 5) {
+      
+      int l = trailHead - 1;
+      int r = trailHead;
+      int count = 0;
+      while (l != trailHead) {
+        count++;
+        if (count > 1500) break;
+        if (l < 0) {
+          l = (int)trails.size() - 1;
+        }
+        if (r < 0) {
+          r = (int)trails.size() - 1;
+        }
+        sf::Vertex line[] = {
+            sf::Vertex(trails[r]),
+            sf::Vertex(trails[l])
+        };
+        line[0].color = fillColor;
+        line[1].color = fillColor;
+        window.draw(line, 2, sf::Lines);
+        l--, r--;
+      }
+    }
+  }    
+
+  void Circle:: draw(sf :: RenderWindow &window, sf :: RenderTexture& texture) {
+    sf:: CircleShape Circle(radius);    
+    Circle.setPosition(position);
+    Circle.setPointCount(50);
+    Circle.setFillColor(fillColor);
+    Circle.setOutlineColor(outlineColor);
+    Circle.setOutlineThickness(thickness);
+    sf :: VertexArray line(sf :: Lines, 2);
+    sf :: VertexArray points(sf :: Points);
+    points.append(getCenter());
+    line[0].position = initialPosition;
+    line[1].position = getCenter();
+    line[0].color    = fillColor;
+    line[1].color    = fillColor; 
+    
+    
+    
+    texture.draw(line);
     window.draw(Circle);
   }    
 
@@ -53,7 +151,9 @@ void Circle:: draw(sf :: RenderWindow& window) {
 
   // Setters
   void Circle::setPosition(float x, float y) {
-    position = sf :: Vector2f(x - radius, y - radius);
+    setInitialPosition(getCenter().x, getCenter().y);
+    position = sf :: Vector2f(x - radius, y - radius);    
+    updateTrail(sf :: Vector2f(x, y));
   }
 
   void Circle::setRadius(float r) {
@@ -78,6 +178,23 @@ void Circle:: draw(sf :: RenderWindow& window) {
 
   void Circle :: setGravity(float g) {
     gravity = g;
+  }
+
+  void Circle :: setInitialPosition(float x, float y) {
+    initialPosition = sf :: Vector2f(x, y);
+    // updateTrail(initialPosition);
+  }
+
+  void Circle :: updateTrail(sf :: Vector2f position) {
+    int len = 500;
+    trailHead++;
+    trailHead %= len;
+    if (trailHead == (int)trails.size()) {
+      trails.push_back(position);
+      
+    } else {
+      trails[trailHead] = position;
+    }
   }
 
   

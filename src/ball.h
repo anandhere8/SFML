@@ -6,8 +6,8 @@
 
 // Ball class declaration inheriting from Circle
 class Ball : public Circle {
-public: 
-  void motion(int reverse = 1);
+  public: 
+    void motion(int reverse = 1);
 };
 
 #endif
