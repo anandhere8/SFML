@@ -43,7 +43,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
           if (count > 1500) break;
           if (l < 0) {
             l = (int)trails.size() - 1;
-          }
+          } 
           if (r < 0) {
             r = (int)trails.size() - 1;
           }
@@ -51,7 +51,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
               sf::Vertex(trails[r]),
               sf::Vertex(trails[l])
           };
-          float opacityFactor = static_cast<float>((int)trails.size() - count) / 500.0f;
+          float opacityFactor = static_cast<float>((int)trails.size() - count) / (int)trails.size() * 1.0f;
           sf::Uint8 newAlpha = static_cast<sf::Uint8>(fillColor.a * opacityFactor);
 
         // Create a new color with less opacity based on ballColor

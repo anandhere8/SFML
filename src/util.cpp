@@ -1,6 +1,7 @@
 #include "ball.h"
 #include "circle.h"
 #include <math.h>
+#include <SFML/Audio.hpp>
 
 float sq(float a) {
   return a * a;
@@ -70,4 +71,17 @@ void handleCollision(Ball &ball, Circle &circle) {
 
 
   // printf("New position of the ball is - %f, %f\n", newVelX, newVelY);
+}
+
+
+void playSound() {
+  sf :: SoundBuffer buffer;
+
+  if (!buffer.loadFromFile("/home/layman/layman/Projects/SFML/audio/golf_ball.wav")) {
+    printf("Failed to load the audio file.\n");
+    // return EXIT_FAILURE;
+  }
+  sf :: Sound sound;
+  sound.setBuffer(buffer);
+  sound.play();
 }

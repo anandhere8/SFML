@@ -1,89 +1,32 @@
-
-////////////////////////////////////////////////////////////
-// Headers
-////////////////////////////////////////////////////////////
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics.hpp>
-#include <cmath>
-#include <ctime>
-#include <cstdlib>
+#include <SFML/Config.hpp>
+// #include 
 
-#ifdef SFML_SYSTEM_IOS
-#include <SFML/Main.hpp>
-#endif
+int main() {
+    // Create a window just to keep the program running
+    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML Sound Test");
+    
+    // Load sound file
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile("/home/layman/layman/Projects/SFML/audio/golf_ball.wav")) {
+        // Error handling if the file fails to load
+        return EXIT_FAILURE;
+    }
+    
+    sf::Sound sound;
+    sound.setBuffer(buffer);
 
-std::string resourcesDir()
-{
-#ifdef SFML_SYSTEM_IOS
-    return "";
-#else
-    return "resources/";
-#endif
-}
+    // Play the sound
+    sound.play();
 
-////////////////////////////////////////////////////////////
-/// Entry point of application
-///
-/// \return Application exit code
-///
-////////////////////////////////////////////////////////////
-int main()
-{
-    const float gameWidth = 800;
-    const float gameHeight = 600;
-
-    // Create the window of the application
-    sf::RenderWindow window(sf::VideoMode(static_cast<unsigned int>(gameWidth), static_cast<unsigned int>(gameHeight), 32), "SFML Tennis",
-                            sf::Style::Titlebar | sf::Style::Close);
-    window.setVerticalSyncEnabled(true);
-
-    sf::RenderTexture RT;
-    RT.create(gameWidth, gameHeight);
-
-    sf::CircleShape CS(50);
-    CS.setPosition(gameWidth / 2, gameHeight / 2);
-    CS.setFillColor(sf::Color::Green);
-
-    sf::Clock clock;
-    while (window.isOpen())
-    {
-        // Handle events
+    // Keep the window open
+    while (window.isOpen()) {
         sf::Event event;
-        while (window.pollEvent(event))
-        {
-            // Window closed or escape key pressed: exit
-            if ((event.type == sf::Event::Closed) ||
-               ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)))
-            {
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed)
                 window.close();
-                break;
-            }
-
-            // Window size changed, adjust view appropriately
-            if (event.type == sf::Event::Resized)
-            {
-                sf::View view;
-                view.setSize(gameWidth, gameHeight);
-                view.setCenter(gameWidth / 2.f, gameHeight  /2.f);
-                window.setView(view);
-            }
         }
-
-        // Clear the window
-        window.clear(sf::Color(0, 0, 0));
-
-        CS.setPosition(int(clock.getElapsedTime().asSeconds() * gameWidth / 2) % (int)gameWidth, gameHeight / 2);
-        RT.draw(CS);
-
-
-        sf::RectangleShape shadow({ gameWidth, gameHeight });
-        shadow.setFillColor(sf::Color(0, 0, 0, 10));
-        RT.draw(shadow);
-
-        RT.display();
-
-        window.draw(sf::Sprite(RT.getTexture()));
-
-        window.display();
     }
 
     return EXIT_SUCCESS;

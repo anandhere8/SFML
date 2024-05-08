@@ -12,10 +12,10 @@ r :
 				make compile;make run; make start
 
 testc : 
-		g++ -c test.cpp
+		g++ -c *.cpp
 
 testr :
-	  g++ test.o -o test-app -lsfml-graphics -lsfml-window -lsfml-system
+	  g++ *.o -o test-app -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 tests : 
 		./test-app

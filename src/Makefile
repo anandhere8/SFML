@@ -2,7 +2,7 @@ compile :
 				g++ -c *.cpp
 
 run :
-				g++ *.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system
+				g++ *.o -o sfml-app -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio
 
 start : 
 				./sfml-app

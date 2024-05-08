@@ -1,4 +1,5 @@
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <vector>
 #include <iostream>
 #include "time.h"
@@ -9,11 +10,11 @@
 #include "info.h"
 
 
-const int screen_w = 800;
-const int screen_h = 600;
-const int circle_R = 250;
+const int screen_w = 600;
+const int screen_h = 800;
+const int circle_R = 280;
 const int ball_R   = 7;
-const int NumberOfBalls = 15 ;
+const int NumberOfBalls = 10 ;
 
 
 
@@ -67,6 +68,7 @@ int getRandomInt(int a, int b) {
 }
 
 
+
 int main()
 {
 
@@ -75,10 +77,12 @@ int main()
     std::srand(static_cast<unsigned int>(std::time(nullptr)));
     sf::ContextSettings settings;
     settings.antialiasingLevel = 8;
-    sf::RenderWindow window(sf::VideoMode(screen_w, screen_h), "My window", 
-      sf::Style::Default, settings);
-    // window.setFramerateLimit(1200);
+    sf::RenderWindow window(sf::VideoMode(screen_w, screen_h), "Ball Simulation", 
+    sf::Style::Default, settings);
+    window.setFramerateLimit(600);
 
+    
+    
     Info info;
 
     std :: vector<Ball> allBalls(NumberOfBalls);
@@ -101,6 +105,24 @@ int main()
     // exit(0);
     int loopCounter = 1;
     bool start = false;
+
+    sf::SoundBuffer buffer;
+    if (!buffer.loadFromFile("/home/layman/layman/Projects/SFML/audio/water.wav")) {
+        // Error handling if the file fails to load
+        return EXIT_FAILURE;
+    }
+    
+    
+    sf::Sound sound;
+    sound.setBuffer(buffer);
+    sound.setBuffer(buffer);
+    sound.setPlayingOffset(sf::Time::Zero);
+    sound.setLoop(true);
+    sound.setPitch(1);
+    sound.setVolume(100);
+
+    // Play the sound
+
     while (window.isOpen()) {
         
         sf::Event event;
@@ -125,6 +147,9 @@ int main()
           B.draw(window); // drawing the ball on the window and lines on the texture
           B.motion();    
           if (IsCollision(B, circle)) {
+
+              
+              sound.play();
               while(IsCollision(B, circle)) {
                 B.motion(-1);
               }    
