@@ -108,7 +108,7 @@ int main()
 
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("/home/layman/layman/Projects/SFML/audio/water.wav")) {
-        // Error handling if the file fails to load
+        printf("Failed to load the audio file\n");
         return EXIT_FAILURE;
     }
     
