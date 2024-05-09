@@ -157,6 +157,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
   }
 
   void Circle::setRadius(float r) {
+    if (r < 0.5) return;
     radius = r;
   }
 

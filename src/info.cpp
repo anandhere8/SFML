@@ -27,3 +27,7 @@ void Info ::draw(sf :: RenderWindow& window) {
   text.setPosition(20, 20);
   window.draw(text);
 }
+
+int Info :: getCollisionCount() {
+  return collisionCounter;
+}

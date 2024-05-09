@@ -14,7 +14,7 @@ const int screen_w = 600;
 const int screen_h = 800;
 const int circle_R = 280;
 const int ball_R   = 7;
-const int NumberOfBalls = 10 ;
+const int NumberOfBalls = 1 ;
 
 
 
@@ -33,6 +33,8 @@ sf::Color generateRainbowColor(float position) {
     return sf::Color();
 }
 
+
+bool kk = false;
 sf::Color generateRandomColor() {
     // Seed the random number generator with the current time
     // std::srand(static_cast<unsigned int>(std::time(nullptr)));
@@ -43,6 +45,12 @@ sf::Color generateRandomColor() {
     sf::Uint8 b = std::rand() % 255;
 
     // Return the generated color
+    if (!kk) {
+      kk = true;
+      return sf::Color(3, 224, 31);
+    }
+    else 
+      return sf::Color(248, 146, 2);
     return sf::Color(r, g, b);
 }
 
@@ -62,15 +70,27 @@ sf::Vector2f generateRandomPosition() {
 }
 
 int getRandomInt(int a, int b) {
-  // return 7;
+  return 30;
   int diff = b - a;
   return std :: rand() % diff + a;
 }
 
 
+void myMusic(bool ok, sf :: Music &music, sf :: Clock &clock, int cnt) {
+  float second = clock.getElapsedTime().asMilliseconds();
+  if (ok and music.getStatus() != sf :: Music :: Playing) {
+    music.play();
+    clock.restart();
+  } else if (second > cnt + 50 and cnt < 300) {
+    music.pause();
+  }
+}
+
 
 int main()
 {
+
+    sf :: Clock clock;
 
     int xCenter = screen_w / 2;
     int yCenter = screen_h / 2;
@@ -106,22 +126,15 @@ int main()
     int loopCounter = 1;
     bool start = false;
 
-    sf::SoundBuffer buffer;
-    if (!buffer.loadFromFile("/home/layman/layman/Projects/SFML/audio/water.wav")) {
-        printf("Failed to load the audio file\n");
-        return EXIT_FAILURE;
-    }
     
-    
-    sf::Sound sound;
-    sound.setBuffer(buffer);
-    sound.setBuffer(buffer);
-    sound.setPlayingOffset(sf::Time::Zero);
-    sound.setLoop(true);
-    sound.setPitch(1);
-    sound.setVolume(100);
+    std :: string audioFilePath = "/home/layman/layman/Projects/SFML/audio/chipchip.wav";
 
-    // Play the sound
+    sf :: Music music;
+
+    if (!music.openFromFile(audioFilePath)) {
+      printf("Failed to load the music file\n");
+      return EXIT_FAILURE;
+    }
 
     while (window.isOpen()) {
         
@@ -146,16 +159,34 @@ int main()
         for (auto &B : allBalls) {
           B.draw(window); // drawing the ball on the window and lines on the texture
           B.motion();    
-          if (IsCollision(B, circle)) {
-
-              
-              sound.play();
+          if (IsCollision(B, circle)) {  
+              myMusic(true, music, clock, info.getCollisionCount());
+              B.increaseRadius();   
               while(IsCollision(B, circle)) {
                 B.motion(-1);
-              }    
-             info.increaseCollisionCount();       
-             handleCollision(B, circle);
-          }                          
+              }   
+              
+
+              info.increaseCollisionCount();    
+             
+              handleCollision(B, circle);
+              if ((int)allBalls.size() < 50) {
+                Ball newB;
+                newB = B;
+                auto vel = B.getVelocity();
+
+                float eps = 0.5;      
+                float RR = B.getRadius() / (2.0f);
+                newB.setRadius(RR);
+                // B.setRadius(RR);
+                newB.setVelocity(vel.x + eps, vel.y + eps);
+                B.setVelocity(vel.x, vel.y);
+              //  allBalls.push_back(newB);
+                break;
+              }
+             
+          }
+          myMusic(false, music, clock, info.getCollisionCount());                                        
         }   
         
         

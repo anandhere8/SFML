@@ -16,7 +16,7 @@ private :
   sf :: Color fillColor;
   sf :: Color outlineColor;
   sf :: Vector2f velocity;
-  float thickness;
+  
   std :: vector<sf::Vector2f> positionVector;
   std :: vector<sf::Vector2f> trails;
   int trailHead = 0;
@@ -24,12 +24,13 @@ private :
 protected : 
   float gravity;
   float delta_t;
-
+  float thickness;
+  
 public: 
   Circle(float x = 0, float y = 0, 
          sf::Color fillColor = sf::Color::Transparent,
          sf::Color outlineColor = sf::Color::White, 
-         float thickness = 2, 
+         float thickness = 5, 
          float radius = 100, 
          int id = 2, float g = 9.81, float delta_t = 0.01);
 

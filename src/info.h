@@ -14,4 +14,6 @@ class Info{
     void draw(sf :: RenderWindow& window);
     
     void increaseCollisionCount(); 
+
+    int getCollisionCount();
 };
