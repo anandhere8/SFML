@@ -6,7 +6,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
      sf :: Color outlineColor, float thickness, float radius, int id, float g, float delta_t) {
         position.x = x - radius;
         position.y = y - radius;
-        velocity.x = 0;
+        velocity.x = 100;
         velocity.y = 0;
         this -> fillColor = fillColor;
         this -> outlineColor = outlineColor;      
@@ -17,6 +17,13 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
         this -> delta_t = delta_t;
         trailHead = -1;
      }
+
+Circle :: Circle(float radius, sf :: Color color) {
+  this->radius = radius;
+  this-> fillColor = color;
+  position.x = 100 - radius;
+  position.y = 100 - radius;
+}
 
     void Circle:: draw(sf :: RenderWindow& window) {
       sf:: CircleShape Circle(radius);    
@@ -159,6 +166,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
 
   void Circle::setRadius(float r) {
     if (r < 0.5) return;
+    
     radius = r;
   }
 
@@ -175,8 +183,8 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
   }
 
   void Circle::setVelocity(float x, float y) {
-    if (x > 100) x = 100;
-    if (y > 100) y = 100;
+    if (x > 200) x = 200;
+    // if (y > 100) y = 100;
     velocity = sf :: Vector2f(x, y);
   }
 
@@ -190,7 +198,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
   }
 
   void Circle :: updateTrail(sf :: Vector2f position) {
-    int len = 500;
+    int len = 50;
     trailHead++;
     trailHead %= len;
     if (trailHead == (int)trails.size()) {
@@ -202,6 +210,7 @@ Circle:: Circle(float x, float y, sf :: Color fillColor,
   }
 
   
+
 
   void Circle:: setID(int id) {
     this -> id = id;

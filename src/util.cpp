@@ -85,3 +85,14 @@ void playSound() {
   sound.setBuffer(buffer);
   sound.play();
 }
+
+bool isBallOutsideCircle(Ball &B, Circle &C) {
+  float dis = sq(B.getCenter().x - C.getCenter().x) + sq(B.getCenter().y - C.getCenter().y);
+  float rad = sq(C.getRadius());
+  if (rad > dis) {
+    
+    return false;
+  }
+  printf("Outside\n");
+  return true;
+}

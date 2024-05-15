@@ -10,7 +10,8 @@ FetchContent_Declare(SFML
     GIT_TAG 2.6.x)
 FetchContent_MakeAvailable(SFML)
 
-add_executable(CMakeSFMLProject src/main.cpp src/ball.cpp src/circle.cpp src/util.cpp src/info.cpp)
+# add_executable(CMakeSFMLProject src/main.cpp src/ball.cpp src/circle.cpp src/util.cpp src/info.cpp)
+add_executable(CMakeSFMLProject wallGame/main.cpp wallGame/boundary.cpp wallGame/circle.cpp wallGame/ball.cpp wallGame/util.cpp)
 target_link_libraries(CMakeSFMLProject PRIVATE sfml-graphics sfml-audio)
 target_compile_features(CMakeSFMLProject PRIVATE cxx_std_17)
 
